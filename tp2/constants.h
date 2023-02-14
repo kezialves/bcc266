@@ -9,7 +9,7 @@
 
 #define MAPPING 2
 // Set to:
-// 1 for direct maaping
+// 1 for direct mapping
 // 2 for LRU mapping
 // 3 for LFU mapping
 

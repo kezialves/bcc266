@@ -24,7 +24,8 @@ typedef struct {
     bool updated;
     int cost;
     int cacheHit;
-    int counter;
+    int timesUsed;
+    int timeInCache;
 } Line;
 
 // 

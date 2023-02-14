@@ -21,21 +21,31 @@ int memoryCacheMapping(int address, Cache* cache) {
             break;
 
         // Least recently used
-        // case 2:
-        //     break;
+        case 2:
+
+            int leastRecentlyUsed = 0;
+
+            for(int i = 1; i < cache->size; i++) {
+                if(cache->lines[i].timeInCache > cache->lines[leastRecentlyUsed].timeInCache) {
+                    leastRecentlyUsed = i;
+                }
+            }
+
+            return leastRecentlyUsed;
+            break;
 
         // Least frequently used
         case 3:
             
-            int smaller = 0;
+            int leastFrequentlyUsed = 0;
 
             for(int i = 1; i < cache->size; i++) {
-                if(cache->lines[i].counter < cache->lines[smaller].counter) {
-                    smaller = i;
+                if(cache->lines[i].timesUsed < cache->lines[leastFrequentlyUsed].timesUsed) {
+                    leastFrequentlyUsed = i;
                 }
             }
 
-            return smaller;
+            return leastFrequentlyUsed;
             break;
     }
 }
@@ -67,7 +77,8 @@ void updateMachineInfos(Machine* machine, Line* line) {
             break;
     }
     
-    line->counter += 1;
+    line->timeInCache = 0;
+    line->timesUsed += 1;
     machine->totalCost += line->cost;
 }
 
@@ -90,6 +101,11 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
 
         cache1[l1pos].cost = COST_ACCESS_L1;
         cache1[l1pos].cacheHit = 1;
+
+        for(int i = 0; i < machine->l1.size; i++){
+            machine->l1.lines[i].timeInCache += 1;
+        }
+
     }
     
     // Block is in memory cache L2
@@ -99,6 +115,10 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
         cache2[l2pos].updated = false;
         cache2[l2pos].cost = COST_ACCESS_L1 + COST_ACCESS_L2;
         cache2[l2pos].cacheHit = 2;
+
+        for(int i = 0; i < machine->l2.size; i++){
+            machine->l2.lines[i].timeInCache += 1;
+        }
 
         // !Can be improved?
         updateMachineInfos(machine, &(cache2[l2pos]));
@@ -113,6 +133,10 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
         cache3[l3pos].cost = COST_ACCESS_L1 + COST_ACCESS_L2 + COST_ACCESS_L3;
         cache3[l3pos].cacheHit = 3;
 
+        for(int i = 0; i < machine->l3.size; i++){
+            machine->l2.lines[i].timeInCache += 1;
+        }
+        
         // !Can be improved?
         updateMachineInfos(machine, &(cache3[l3pos]));
         return &(cache3[l3pos]);
