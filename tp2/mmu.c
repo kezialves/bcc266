@@ -1,4 +1,5 @@
 #include "mmu.h"
+#include "constants.h"
 #include <stdio.h>
 
 bool canOnlyReplaceBlock(Line line) {
@@ -11,7 +12,32 @@ bool canOnlyReplaceBlock(Line line) {
 }
 
 int memoryCacheMapping(int address, Cache* cache) {
-    return address % cache->size;
+
+    switch(MAPPING) {
+
+        // Direct mapping
+        case 1:
+            return address % cache->size;
+            break;
+
+        // Least recently used
+        // case 2:
+        //     break;
+
+        // Least frequently used
+        case 3:
+            
+            int smaller = 0;
+
+            for(int i = 1; i < cache->size; i++) {
+                if(cache->lines[i].counter < cache->lines[smaller].counter) {
+                    smaller = i;
+                }
+            }
+
+            return smaller;
+            break;
+    }
 }
 
 void updateMachineInfos(Machine* machine, Line* line) {
@@ -41,6 +67,7 @@ void updateMachineInfos(Machine* machine, Line* line) {
             break;
     }
     
+    line->counter += 1;
     machine->totalCost += line->cost;
 }
 

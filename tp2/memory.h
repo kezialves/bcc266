@@ -20,10 +20,11 @@ typedef struct {
 // 
 typedef struct {
     MemoryBlock block;
-    int tag; /* Address of the block in memory RAM */
+    int tag; // Address of the block in memory RAM
     bool updated;
     int cost;
     int cacheHit;
+    int counter;
 } Line;
 
 // 
