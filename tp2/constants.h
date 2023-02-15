@@ -7,7 +7,7 @@
 #define COST_ACCESS_L3 100
 #define COST_ACCESS_RAM 1000
 
-#define MAPPING 2
+#define MAPPING 1
 // Set to:
 // 1 for direct mapping
 // 2 for LRU mapping
