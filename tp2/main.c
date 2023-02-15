@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 int main(int argc, char**argv) {
 
@@ -40,6 +41,7 @@ int main(int argc, char**argv) {
     }
     
     printf("Starting machine...\n");
+    sleep(1);
     start(&machine, instructions, memoriesSize);
 
     if(memoriesSize[0] < 10)
@@ -53,5 +55,6 @@ int main(int argc, char**argv) {
     stop(&machine);
 
     printf("Stopping machine...\n");
+    sleep(1);
     return 0;
 }

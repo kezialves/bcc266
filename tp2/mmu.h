@@ -5,7 +5,7 @@
 #include "instruction.h"
 #include "cpu.h"
 
-// 
-Line* MMUSearchOnMemorys(Address, Machine*);
+// Search info on memory
+Line* MMUSearchOnMemorys(Address, Machine*); // Order of complexity: O(n);
 
 #endif // !MMU_H

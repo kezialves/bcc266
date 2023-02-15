@@ -1,6 +1,7 @@
 #include "mmu.h"
 #include "constants.h"
 #include <stdio.h>
+#include <unistd.h>
 
 bool canOnlyReplaceBlock(Line line) {
 
@@ -87,8 +88,20 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
     // Strategy => write back
     
     // Memory map
+
+    // Searching in cache L1
+    // printf("Searching in cache L1...\n");
+    usleep(40000);
     int l1pos = memoryCacheMapping(add.block, &machine->l1);
-    int l2pos = memoryCacheMapping(add.block, &machine->l2);    
+
+    // Searching in cache L2
+    // printf("Searching in cache L2...\n");
+    usleep(100000);
+    int l2pos = memoryCacheMapping(add.block, &machine->l2);
+
+    // Searching in cache L3
+    // printf("Searching in cache L3...\n");
+    usleep(200000);
     int l3pos = memoryCacheMapping(add.block, &machine->l3);
 
     Line* cache1 = machine->l1.lines;
@@ -123,7 +136,6 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
         cache2[l2pos].cost = COST_ACCESS_L1 + COST_ACCESS_L2;
         cache2[l2pos].cacheHit = 2;
 
-        // !Can be improved?
         updateMachineInfos(machine, &(cache2[l2pos]));
         return &(cache2[l2pos]);
     }
@@ -136,7 +148,6 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
         cache3[l3pos].cost = COST_ACCESS_L1 + COST_ACCESS_L2 + COST_ACCESS_L3;
         cache3[l3pos].cacheHit = 3;
 
-        // !Can be improved?
         updateMachineInfos(machine, &(cache3[l3pos]));
         return &(cache3[l3pos]);
     }

@@ -4,7 +4,7 @@
 #include "instruction.h"
 #include "memory.h"
 
-// 
+// Machine's abstract data type
 typedef struct {
     Instruction* instructions;
     RAM ram;
@@ -16,16 +16,16 @@ typedef struct {
     int totalCost;
 } Machine;
 
-// :) 
+// Starts the machine
 void start(Machine*, Instruction*, int*);
 
-// 
+// Stops the machine
 void stop(Machine*);
 
-// 
+// Runs the machine
 void run(Machine*);
 
-// 
+// Prints the memories
 void printMemories(Machine*);
 
 #endif // !CPU_H
