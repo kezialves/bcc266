@@ -26,7 +26,11 @@ int memoryCacheMapping(int address, Cache* cache) {
 
             int leastRecentlyUsed = 0;
 
-            for(int i = 1; i < cache->size; i++) {
+            for(int i = 0; i < cache->size; i++) {
+
+                if(cache->lines[i].tag == address)
+                    return i;
+
                 if(cache->lines[i].timeInCache > cache->lines[leastRecentlyUsed].timeInCache) {
                     leastRecentlyUsed = i;
                 }
@@ -40,7 +44,11 @@ int memoryCacheMapping(int address, Cache* cache) {
             
             int leastFrequentlyUsed = 0;
 
-            for(int i = 1; i < cache->size; i++) {
+            for(int i = 0; i < cache->size; i++) {
+
+                if(cache->lines[i].tag == address)
+                    return i;
+
                 if(cache->lines[i].timesUsed < cache->lines[leastFrequentlyUsed].timesUsed) {
                     leastFrequentlyUsed = i;
                 }
@@ -91,17 +99,17 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
 
     // Searching in cache L1
     // printf("Searching in cache L1...\n");
-    usleep(40000);
+    //usleep(40000);
     int l1pos = memoryCacheMapping(add.block, &machine->l1);
 
     // Searching in cache L2
     // printf("Searching in cache L2...\n");
-    usleep(100000);
+    //usleep(100000);
     int l2pos = memoryCacheMapping(add.block, &machine->l2);
 
     // Searching in cache L3
     // printf("Searching in cache L3...\n");
-    usleep(200000);
+    //usleep(200000);
     int l3pos = memoryCacheMapping(add.block, &machine->l3);
 
     Line* cache1 = machine->l1.lines;
@@ -154,8 +162,8 @@ Line* MMUSearchOnMemorys(Address add, Machine* machine) {
     
     // Block only in memory RAM, need to bring it to cache and manipulate the blocks
     else { 
-        l3pos = memoryCacheMapping(cache2[l2pos].tag, &machine->l3);
-        l2pos = memoryCacheMapping(cache1[l1pos].tag, &machine->l2); // Need to check the position of the block that will leave the L1
+        //l3pos = memoryCacheMapping(cache2[l2pos].tag, &machine->l3);
+        //l2pos = memoryCacheMapping(cache1[l1pos].tag, &machine->l2); // Need to check the position of the block that will leave the L1
         
         if(!canOnlyReplaceBlock(cache1[l1pos])) { // The block on cache L1 cannot only be replaced, the memories must be updated
             if (!canOnlyReplaceBlock(cache2[l2pos])) {// The block on cache L2 cannot only be replaced, the memories must be updated

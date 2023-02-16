@@ -23,8 +23,8 @@ typedef struct {
     bool updated;
     int cost;
     int cacheHit;
-    int timesUsed; // Tracks how many times the line has been used
-    int timeInCache; // Tracks how long the line has remained unchanged
+    int timesUsed; // Tracks how many times the line has been used (LFU)
+    int timeInCache; // Tracks how long the line has remained unchanged (LRU)
 } Line;
 
 // Cache's abstract data type
